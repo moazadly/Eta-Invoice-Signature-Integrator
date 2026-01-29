@@ -7,6 +7,26 @@ const app = express();
 // Middleware
 app.use(express.json());
 
+// Request/Response logging middleware
+app.use((req, res, next) => {
+    // Log the request
+    const requestLog = {
+        method: req.method,
+        url: req.originalUrl,
+        body: req.body
+    };
+    logger.info(`REQUEST: ${JSON.stringify(requestLog)}`);
+
+    // Capture the original res.json to log the response
+    const originalJson = res.json.bind(res);
+    res.json = (data) => {
+        logger.info(`RESPONSE: ${JSON.stringify(data)}`);
+        return originalJson(data);
+    };
+
+    next();
+});
+
 // Routes
 app.use('/api/invoice', invoiceRoutes);
 

@@ -35,14 +35,12 @@ function log(level, message) {
         console.log(logMessage.trim());
     }
 
-    // Write errors to file
-    if (level === 'ERROR') {
-        try {
-            ensureLogsDir();
-            fs.appendFileSync(getLogFilePath(), logMessage);
-        } catch (err) {
-            console.error(`Failed to write to log file: ${err.message}`);
-        }
+    // Write all logs to file
+    try {
+        ensureLogsDir();
+        fs.appendFileSync(getLogFilePath(), logMessage);
+    } catch (err) {
+        console.error(`Failed to write to log file: ${err.message}`);
     }
 }
 
