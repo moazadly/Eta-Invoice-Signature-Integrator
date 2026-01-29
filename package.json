@@ -1,0 +1,20 @@
+{
+  "name": "kempinski-invoice-nodejs",
+  "version": "1.0.0",
+  "description": "Invoice signature API for Egyptian Tax Authority",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@chilkat/ck-node18-linux64": "^9.50.96",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "pkg": "^5.8.1"
+  }
+}
