@@ -94,9 +94,23 @@ async function getCertificate() {
     }
 }
 
-async function signHash(hashBase64) {
+    async function signHash(hashBase64) {
     try {
-        const signatureBase64 = await runPowerShell('sign_data.ps1', [hashBase64]);
+        const configPath = path.join(__dirname, '../../config.json');
+        let pin = "";
+        try {
+             const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+             pin = config.smartCardPin || "";
+        } catch (e) {
+             logger.warn("Could not read config.json for PIN: " + e.message);
+        }
+
+        const args = [hashBase64];
+        if (pin) {
+            args.push(pin);
+        }
+
+        const signatureBase64 = await runPowerShell('sign_data.ps1', args);
         return signatureBase64;
     } catch (error) {
         logger.error(`Failed to sign data: ${error.message}`);

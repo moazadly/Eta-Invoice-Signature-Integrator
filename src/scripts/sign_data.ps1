@@ -1,5 +1,6 @@
 param(
-    [string]$HashBase64
+    [string]$HashBase64,
+    [string]$Pin
 )
 
 if ([string]::IsNullOrEmpty($HashBase64)) {
@@ -22,16 +23,45 @@ $hashBytes = [Convert]::FromBase64String($HashBase64)
 
 # Get Private Key
 try {
-    # Try legacy property first
-    $rsa = $cert.PrivateKey
-    
-    # If null, try to get CNG key via extension method (available in .NET 4.6+)
+    # Check if we have a PIN and can use CspParameters for RSACryptoServiceProvider (Legacy CSP)
+    $rsa = $null
+
+    if (-not [string]::IsNullOrEmpty($Pin)) {
+        try {
+            # Attempt to use CSP Parameters with PIN
+            # Note: This generally works for 'Legacy' CSPs (e.g., ePass2003 CSP).
+            # It might not work for CNG (KSP) providers directly without more complex interop.
+            
+            $privKey = $cert.PrivateKey
+            if ($privKey -is [System.Security.Cryptography.RSACryptoServiceProvider]) {
+                $cspParams = New-Object System.Security.Cryptography.CspParameters
+                $cspParams.ProviderType = $privKey.CspKeyContainerInfo.ProviderType
+                $cspParams.ProviderName = $privKey.CspKeyContainerInfo.ProviderName
+                $cspParams.KeyContainerName = $privKey.CspKeyContainerInfo.KeyContainerName
+                $cspParams.KeyNumber = $privKey.CspKeyContainerInfo.KeyNumber
+                $cspParams.Flags = [System.Security.Cryptography.CspProviderFlags]::UseExistingKey
+                
+                # Set the PIN
+                $securePin = ConvertTo-SecureString $Pin -AsPlainText -Force
+                $cspParams.KeyPassword = $securePin
+                
+                $rsa = New-Object System.Security.Cryptography.RSACryptoServiceProvider($cspParams)
+            }
+        }
+        catch {
+            Write-Warning "Failed to apply PIN to CSP: $_. Falling back to default prompt."
+        }
+    }
+
+    # Fallback / Default Access
     if ($null -eq $rsa) {
-        # Load the assembly if needed (usually loaded by default in PS 5.1+)
-        # [System.Security.Cryptography.X509Certificates.RSACertificateExtensions]
+        # Try legacy property first
+        $rsa = $cert.PrivateKey
         
-        # We can use the GetRSAPrivateKey method
-        $rsa = [System.Security.Cryptography.X509Certificates.RSACertificateExtensions]::GetRSAPrivateKey($cert)
+        # If null, try to get CNG key via extension method (available in .NET 4.6+)
+        if ($null -eq $rsa) {
+            $rsa = [System.Security.Cryptography.X509Certificates.RSACertificateExtensions]::GetRSAPrivateKey($cert)
+        }
     }
 
     if ($null -eq $rsa) {
