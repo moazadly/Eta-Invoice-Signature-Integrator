@@ -1,0 +1,11 @@
+[2026-02-12T19:50:09.482Z] [INFO] Server is running on port 3000
+[2026-02-12T19:50:09.487Z] [INFO] Invoice signing endpoint: POST http://localhost:3000/api/invoice/sign
+[2026-02-12T19:50:16.431Z] [INFO] Signature process started.
+[2026-02-12T19:50:16.433Z] [INFO] Data hashed. Hash: iNx06mKbDHxchb4mO60r7Gbynvw/b2UHIyowgsFKZAs=
+[2026-02-12T19:50:16.438Z] [INFO] Executing PowerShell script: get_cert.ps1
+[2026-02-12T19:50:16.984Z] [INFO] Certificate retrieved from smart card.
+[2026-02-12T19:50:17.001Z] [INFO] Executing PowerShell script: sign_data.ps1
+[2026-02-12T19:50:17.783Z] [INFO] Signature generated successfully via PowerShell/pkijs
+[2026-02-12T19:53:41.917Z] [ERROR] Uncaught Exception: listen EADDRINUSE: address already in use :::3000
+[2026-02-12T19:57:29.029Z] [INFO] Server is running on port 3000
+[2026-02-12T19:57:29.032Z] [INFO] Invoice signing endpoint: POST http://localhost:3000/api/invoice/sign

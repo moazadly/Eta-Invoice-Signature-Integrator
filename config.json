@@ -1,4 +1,5 @@
 {
     "smartCardPin": "15710115",
+    "dllPath": "C:\\Windows\\System32\\eps2003csp11.dll",
     "port": 3000
 }

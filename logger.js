@@ -6,11 +6,14 @@ const logFilePath = path.join(path.dirname(process.execPath), 'application.log')
 // If running from source (node index.js), process.execPath is the node binary.
 // We might want to log to the script directory in that case.
 // If running as pkg, process.execPath is the executable itself.
+// Determine log path based on environment
 const getLogPath = () => {
-    if (path.basename(process.execPath).startsWith('node')) {
-        return path.join(__dirname, 'application.log');
+    // If running as a packaged executable (process.pkg is defined)
+    if (process.pkg) {
+        return path.join(path.dirname(process.execPath), 'application.log');
     }
-    return path.join(path.dirname(process.execPath), 'application.log');
+    // If running in development (node index.js)
+    return path.join(__dirname, 'application.log');
 };
 
 const LOG_FILE = getLogPath();
