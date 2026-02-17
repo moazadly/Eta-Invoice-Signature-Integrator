@@ -9,3 +9,11 @@
 [2026-02-12T19:53:41.917Z] [ERROR] Uncaught Exception: listen EADDRINUSE: address already in use :::3000
 [2026-02-12T19:57:29.029Z] [INFO] Server is running on port 3000
 [2026-02-12T19:57:29.032Z] [INFO] Invoice signing endpoint: POST http://localhost:3000/api/invoice/sign
+[2026-02-17T12:53:47.763Z] [INFO] Signature process started.
+[2026-02-17T12:53:47.766Z] [INFO] Data hashed. Hash: eGNQXjxIGF4QE8xPB3R1tv0rd+0I/cC8rs0zJtWne3U=
+[2026-02-17T12:53:47.770Z] [INFO] Certificate retrieved from smart card.
+[2026-02-17T12:53:47.795Z] [ERROR] Signature generation error: Error during parsing of ASN.1 data. Data is not correct for 'Certificate'.
+[2026-02-17T12:54:01.583Z] [INFO] Signature process started.
+[2026-02-17T12:54:01.590Z] [INFO] Data hashed. Hash: eGNQXjxIGF4QE8xPB3R1tv0rd+0I/cC8rs0zJtWne3U=
+[2026-02-17T12:54:01.592Z] [INFO] Certificate retrieved from smart card.
+[2026-02-17T12:54:01.600Z] [ERROR] Signature generation error: Error during parsing of ASN.1 data. Data is not correct for 'Certificate'.

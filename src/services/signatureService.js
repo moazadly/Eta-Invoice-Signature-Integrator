@@ -19,6 +19,36 @@ async function signInvoice(payload) {
         logger.info("Signature process started.");
         
         // 1. Canonicalize
+        
+        // Clean and Normalize Payload (in-place)
+        // ensure documentType is uppercase
+        if (payload.documentType) {
+            payload.documentType = payload.documentType.toUpperCase();
+        }
+
+        // Recursive function to remove null/undefined values
+        const removeNulls = (obj) => {
+            if (Array.isArray(obj)) {
+                 return obj.map(v => removeNulls(v)).filter(v => v !== null && v !== undefined);
+            } else if (typeof obj === 'object' && obj !== null) {
+                Object.keys(obj).forEach(key => {
+                    if (obj[key] === null || obj[key] === undefined) {
+                        delete obj[key];
+                    } else {
+                        removeNulls(obj[key]);
+                    }
+                });
+            }
+            return obj;
+        };
+        
+        removeNulls(payload);
+        
+        // Debug Log to verify cleanup
+        if (process.env.DEBUG_SIGNATURE) {
+            console.log("Cleaned Payload:", JSON.stringify(payload, null, 2));
+        }
+
         const canonicalString = serialize(payload);
         const dataBuffer = Buffer.from(canonicalString, 'utf8');
         // logger.info("Canonicalization complete.");

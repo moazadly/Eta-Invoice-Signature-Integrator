@@ -31,6 +31,11 @@ function serialize(obj) {
 
     for (const key of keys) {
         const value = obj[key];
+        // Skip null or undefined values to avoid "KEY""" (empty value) in canonical string
+        if (value === null || value === undefined) {
+            continue;
+        }
+        
         const upperKey = key.toUpperCase();
 
         if (Array.isArray(value)) {
